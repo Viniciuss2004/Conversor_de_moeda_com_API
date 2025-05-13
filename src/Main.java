@@ -1,7 +1,6 @@
-import ExceptionP.OpcaoInvalidaException;
 import Service.ConversorMoeda;
+import Service.ListarMoedas;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -9,35 +8,43 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         ConversorMoeda conversor = new ConversorMoeda();
+        ListarMoedas listar = new ListarMoedas();
 
-        while (true) {
-            System.out.println("****************************************");
-            System.out.println("Seja bem-vindo/a ao Conversor de Moeda =]\n");
-            System.out.print("1) Dólar ⟶ Peso Argentino" +
-                    "\n2) Peso Argentino ⟶ Dólar" +
-                    "\n3) Dólar ⟶ Real Brasileiro" +
-                    "\n4) Real Brasileiro ⟶ Dólar" +
-                    "\n5) Dólar ⟶ Peso Colombiano" +
-                    "\n6) Peso Colombiano ⟶ Dólar" +
-                    "\n7) Sair\n\n");
-            System.out.print("Escolha uma opção válida: ");
+        int opcao = 0;
+        while (opcao != 3) {
+            System.out.println("**********************************************************************");
+            System.out.println("\u001B[32m             Seja bem-vindo/a ao Conversor de Moeda =]\n\u001B[0m");
+            System.out.println("Escolha uma opção:\n");
+            System.out.print("1 - Converter Moeda\n2 - Listar Moedas\n3 - Sair\n\nR:");
+            opcao = sc.nextInt();
+            sc.nextLine();
 
-            int opcao = 0;
-            try {
-                opcao = sc.nextInt();
-                sc.nextLine();
-                if (opcao < 1 || opcao > 7) {
-                    throw new OpcaoInvalidaException("Opção inválida número " + opcao + " não está nas opções!");
-                }
-            } catch (InputMismatchException e) {
-                sc.nextLine();
-                System.out.println("Digite apenas números inteiros entre 1 e 7!");
-                continue;
+            switch (opcao) {
+                case 1:
+                    System.out.println("\u001B[32m\nOBS: Digite apenas o código da moeda, por exemplo (BRL, USD, EUR...)\u001B[0m");
+
+                    System.out.print("\nDigite o código da moeda que deseja converter: ");
+                    String moeda1 = sc.nextLine();
+
+                    System.out.print("\nDigite o código da moeda para qual será convertida: ");
+                    String moeda2 = sc.nextLine();
+
+                    conversor.converterMoeda(moeda1, moeda2);
+                    break;
+
+                case 2:
+                    listar.listarMoedas();
+                    break;
+
+                case 3:
+                    System.out.println("\u001B[32m\nSaindo...");
+                    sc.close();
+                    break;
+
+                default:
+                    System.out.println("\nOpção inválida!");
+                    break;
             }
-
-            System.out.print("****************************************\n\n");
-
-            conversor.converterMoeda(opcao);
         }
     }
 }
